@@ -43,29 +43,30 @@ def localization_gt_loader(sample, annotation_path):
 
 
 def audio_loader(sample, neg_sample):
-	# Get positive audio
-	video_path = sample.replace('\n','')
-	words = [word.replace('\n','') for word in video_path.split('/')]
-	video_name = words[-1]
-	audio_file = video_name+'.mat'
-	audio_path = video_path + '/' + audio_file
-	pos_sound_file = sio.loadmat(audio_path)
-	pos_sound = (pos_sound_file['data_1'])['values']
-	pos_sound = pos_sound[0][0]
-	pos_sound = np.asarray(pos_sound) # CHECK THE SIZE!
-	pos_sound_tensor = torch.from_numpy(pos_sound).squeeze().float()
+    base_dir = "/kaggle/working/learning_to_localize_sound_source/Dataset"
 
-	# Get negative audio
-	neg_video_path = neg_sample.replace('\n','')
-	neg_words = [neg_word.replace('\n','') for neg_word in neg_video_path.split('/')]
-	neg_video_name = neg_words[-1]
-	neg_audio_file = neg_video_name+'.mat'
-	neg_audio_path = neg_video_path + '/' + neg_audio_file
-	neg_sound_file = sio.loadmat(neg_audio_path)
-	neg_sound = (neg_sound_file['data_1'])['values']
-	neg_sound = neg_sound[0][0]
-	neg_sound = np.asarray(neg_sound) # CHECK THE SIZE!
-	neg_sound_tensor = torch.from_numpy(neg_sound).squeeze().float()
+    # Positive sample
+    video_id = sample.strip().replace(".jpg", "")
+    pos_audio_path = os.path.join(base_dir, "test_subset", video_id, f"{video_id}.mat")
+    if not os.path.exists(pos_audio_path):
+        raise FileNotFoundError(f"Missing positive audio file: {pos_audio_path}")
+
+    pos_sound_file = sio.loadmat(pos_audio_path)
+    pos_sound = pos_sound_file['data_1']['values'][0][0]
+    pos_sound_tensor = torch.from_numpy(np.asarray(pos_sound)).squeeze().float()
+
+    # Negative sample
+    neg_video_id = neg_sample.strip().replace(".jpg", "")
+    neg_audio_path = os.path.join(base_dir, "test_subset", neg_video_id, f"{neg_video_id}.mat")
+    if not os.path.exists(neg_audio_path):
+        raise FileNotFoundError(f"Missing negative audio file: {neg_audio_path}")
+
+    neg_sound_file = sio.loadmat(neg_audio_path)
+    neg_sound = neg_sound_file['data_1']['values'][0][0]
+    neg_sound_tensor = torch.from_numpy(np.asarray(neg_sound)).squeeze().float()
+
+    return pos_sound_tensor, neg_sound_tensor
+
 
 	return pos_sound_tensor, neg_sound_tensor
 
