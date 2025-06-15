@@ -88,7 +88,12 @@ class Sound_Localization_Dataset(Dataset):
 
 		self.data = lines
 
-		self.preprocess = transforms.Compose([transforms.Scale((320,320)),transforms.ToTensor(),transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])])
+		self.preprocess = transforms.Compose([
+		    transforms.Resize((320,320)),
+		    transforms.ToTensor(),
+		    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+		                         std=[0.229, 0.224, 0.225])
+		])
 
 	def __getitem__(self,index):
 		datum = self.data[index]
