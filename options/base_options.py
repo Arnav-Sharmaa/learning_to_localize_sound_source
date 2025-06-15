@@ -57,7 +57,7 @@ class BaseOptions():
 		if not self.initialized:
 			self.initialize()
 		self.opt = self.parser.parse_args()
-		self.opt.mode = self.mode
+		# self.opt.mode = self.mode
 
 		str_ids = self.opt.gpu_ids.split(',')
 		self.opt.gpu_ids = []
