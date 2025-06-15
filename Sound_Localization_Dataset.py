@@ -70,10 +70,8 @@ def audio_loader(sample, neg_sample):
 	return pos_sound_tensor, neg_sound_tensor
 
 def image_loader(video_path):
-    print(video_path[:-1])  # For debugging
-
-    video_id = os.path.basename(video_path)
-    image_path = os.path.join(video_path, f"{video_id}.jpg")
+    video_id = os.path.basename(video_path.strip())
+    image_path = os.path.join(video_path,f"{video_id}.jpg")
 
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"No image found: {image_path}")
