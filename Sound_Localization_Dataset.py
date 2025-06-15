@@ -67,9 +67,6 @@ def audio_loader(sample, neg_sample):
 
     return pos_sound_tensor, neg_sound_tensor
 
-
-	return pos_sound_tensor, neg_sound_tensor
-
 def image_loader(video_id):
     video_id = video_id.strip().replace(".jpg", "")
     image_path = os.path.join(
