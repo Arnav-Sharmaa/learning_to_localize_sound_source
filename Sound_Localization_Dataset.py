@@ -85,11 +85,9 @@ class Sound_Localization_Dataset(Dataset):
 
 		self.mode = mode
 		self.annotation_path = annotation_path
-		ds = open(dataset_file)
-		lines = ds.readlines()
-
-		self.data = lines
-
+		with open(dataset_file, 'r') as f:
+			self.data = [line.strip() for line in f if line.strip()]
+	
 		self.preprocess = transforms.Compose([
 		    transforms.Resize((320,320)),
 		    transforms.ToTensor(),
