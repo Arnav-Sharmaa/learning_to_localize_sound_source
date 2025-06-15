@@ -69,17 +69,14 @@ def audio_loader(sample, neg_sample):
 
 	return pos_sound_tensor, neg_sound_tensor
 
-def image_loader(video_path):
-	video_id = os.path.basename(video_path.strip())
+def image_loader(video_id):
+    video_id = video_id.strip().replace('.jpg', '')
+    image_path = os.path.join("/kaggle/working/learning_to_localize_sound_source/test_subset", f"{video_id}.jpg")
 
-	image_path = os.path.join(video_path,f"{video_id}.jpg")
-	print(image_path)
-	if not os.path.exists(image_path):
-		raise FileNotFoundError(f"No image found: {image_path}")
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"No image found: {image_path}")
 
-	return Image.open(image_path).convert('RGB')
-
-
+    return Image.open(image_path).convert('RGB')
 
 class Sound_Localization_Dataset(Dataset):
 	def __init__(self, dataset_file, mode, annotation_path):
