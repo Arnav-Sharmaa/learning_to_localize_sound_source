@@ -70,16 +70,15 @@ def audio_loader(sample, neg_sample):
 	return pos_sound_tensor, neg_sound_tensor
 
 def image_loader(sample):
-    video_path = sample.strip()  # Replaces '\n' and other whitespace
-    all_frames = sorted(glob.glob(video_path + '/*.jpg'))
-
-    if len(all_frames) == 0:
-        print(f"[ERROR] No image frames found in: {video_path}")
-        raise FileNotFoundError(f"No frames found in {video_path}")
-
-    first_image_path = str(all_frames[0])
-    first_image = Image.open(first_image_path).convert('RGB')
-    return first_image
+    video_path = sample.replace('\n', '')
+    video_id = os.path.basename(video_path)
+    image_path = os.path.join(video_path, f"{video_id}.jpg")
+    
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"No image found: {image_path}")
+    
+    image = Image.open(image_path).convert('RGB')
+    return image
 
 
 
